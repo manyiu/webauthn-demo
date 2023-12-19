@@ -1,3 +1,4 @@
+import { useAuthenticator } from "@aws-amplify/ui-react";
 import {
   startAuthentication,
   startRegistration,
@@ -11,6 +12,7 @@ import cdkOutput from "./amplify/index.json";
 const apiEndpointUrl = cdkOutput.WebauthnDemoStack.ApiEndpoint;
 
 function App() {
+  const { user, signOut } = useAuthenticator((context) => [context.user]);
   const usernameRef = React.useRef<HTMLInputElement>(null);
 
   const registerHandler = async () => {
@@ -96,19 +98,28 @@ function App() {
   return (
     <>
       <h1>WebAuthn Demo</h1>
-
-      <input
-        aria-label="username"
-        type="text"
-        placeholder="username"
-        ref={usernameRef}
-      />
-      <button onClick={registerHandler}>
-        Register with Passkey or Security Key
-      </button>
-      <button onClick={signInHandler}>
-        Sign in with Passkey or Security Key
-      </button>
+      {user && (
+        <>
+          <p>Hello, {user.username}</p>
+          <button onClick={signOut}>Sign out</button>
+        </>
+      )}
+      {!user && (
+        <>
+          <input
+            aria-label="username"
+            type="text"
+            placeholder="username"
+            ref={usernameRef}
+          />
+          <button onClick={registerHandler}>
+            Register with Passkey or Security Key
+          </button>
+          <button onClick={signInHandler}>
+            Sign in with Passkey or Security Key
+          </button>
+        </>
+      )}
     </>
   );
 }

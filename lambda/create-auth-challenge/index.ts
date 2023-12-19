@@ -20,13 +20,6 @@ export const handler: CreateAuthChallengeTriggerHandler = async (
   ) {
     const options = await generateAuthenticationOptions({
       rpID: "localhost",
-      //   allowCredentials: [
-      //     {
-      //       id: Buffer.from(event.request.userAttributes["custom:credentialId"]),
-      //       type: "public-key",
-      //       transports: ["internal"],
-      //     },
-      //   ],
     });
 
     console.log("OPTIONS: \n" + JSON.stringify(options, null, 2));
